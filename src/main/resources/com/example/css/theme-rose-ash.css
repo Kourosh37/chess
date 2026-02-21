@@ -1,0 +1,132 @@
+.app-root {
+    -fx-background-color: linear-gradient(to bottom right, #2f2830, #3b313b 42%, #473a45);
+}
+
+.menu-pane,
+.page-pane,
+.side-panel,
+.board-area,
+.confirm-card {
+    -fx-background-color: rgba(68, 56, 66, 0.9);
+    -fx-border-color: rgba(216, 167, 183, 0.42);
+    -fx-border-width: 1;
+    -fx-border-radius: 22;
+}
+
+.game-top-bar {
+    -fx-background-color: rgba(79, 64, 76, 0.94);
+    -fx-border-color: rgba(216, 167, 183, 0.35);
+}
+
+.label,
+.field-label,
+.title-main,
+.page-title,
+.subtitle-main,
+.captured-title,
+.panel-title {
+    -fx-text-fill: #f0dce3;
+}
+
+.menu-action,
+.combo-box,
+.check-box,
+.list-view,
+.text-field,
+.slider {
+    -fx-background-color: #614d5d;
+    -fx-border-color: #d8a2b4;
+    -fx-text-fill: #f7e7ed;
+}
+
+.board-host {
+    -fx-background-color: rgba(47, 38, 45, 0.92);
+    -fx-border-color: rgba(216, 167, 183, 0.44);
+    -fx-border-width: 1;
+}
+
+.board-frame {
+    -fx-background-color: rgba(36, 29, 35, 0.95);
+}
+
+.board-grid {
+    -fx-border-color: #483943;
+}
+
+.board-legend {
+    -fx-text-fill: #dfbed0;
+}
+
+.square-light {
+    -fx-background-color: linear-gradient(to bottom, #e0c8cf, #d3b9c0);
+}
+
+.square-dark {
+    -fx-background-color: linear-gradient(to bottom, #7a5c67, #694f59);
+}
+
+.square-cell.piece-white,
+.moving-piece.piece-white {
+    -fx-text-fill: #fff2f5;
+}
+
+.square-cell.piece-black,
+.moving-piece.piece-black {
+    -fx-text-fill: #352831;
+}
+
+.square-cell.selected-square {
+    -fx-border-color: #e0bb6a;
+}
+
+.square-cell.target-square {
+    -fx-border-color: #8ec6a1;
+}
+
+.captured-line,
+.captured-line-vertical {
+    -fx-text-fill: #f1e2e9;
+}
+
+.list-view,
+.list-cell {
+    -fx-control-inner-background: #564354;
+    -fx-text-fill: #f7e8ee;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: rgba(214, 157, 176, 0.45);
+}
+
+.confirm-overlay {
+    -fx-background-color: rgba(9, 5, 8, 0.54);
+}
+
+.toast-info {
+    -fx-background-color: rgba(107, 128, 176, 0.95);
+}
+
+.toast-success {
+    -fx-background-color: rgba(79, 145, 116, 0.95);
+}
+
+.toast-error {
+    -fx-background-color: rgba(192, 95, 100, 0.95);
+}
+.palette-card {
+    -fx-background-color: rgba(79, 64, 76, 0.88);
+    -fx-border-color: rgba(216, 167, 183, 0.5);
+}
+
+.palette-card-title {
+    -fx-text-fill: #f4e6ec;
+}
+
+.palette-swatch,
+.theme-combo-swatch {
+    -fx-border-color: rgba(32, 22, 30, 0.45);
+}
+
+.palette-card-selected {
+    -fx-border-color: #d8a2b4;
+}

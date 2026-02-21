@@ -1,0 +1,71 @@
+# =========================
+# Java / Maven
+# =========================
+target/
+out/
+build/
+
+*.class
+*.jar
+*.war
+*.ear
+*.jmod
+
+# Maven wrapper 
+.mvn/wrapper/maven-wrapper.jar
+
+# =========================
+# Runtime / App data
+# =========================
+# Prevent accidental commit of local save artifacts if copied into resources
+src/main/resources/com/example/*.save
+
+# Logs / crash dumps
+*.log
+hs_err_pid*
+replay_pid*
+
+# Temp files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# =========================
+# IDE / Editor
+# =========================
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Eclipse
+.classpath
+.project
+.settings/
+.apt_generated/
+.factorypath
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini

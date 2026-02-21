@@ -1,0 +1,301 @@
+.app-root {
+    -fx-font-family: "Segoe UI", "Tahoma", sans-serif;
+}
+
+.title-main {
+    -fx-font-size: 62px;
+    -fx-font-weight: 900;
+}
+
+.subtitle-main {
+    -fx-font-size: 18px;
+    -fx-opacity: 0.88;
+}
+
+.page-title {
+    -fx-font-size: 34px;
+    -fx-font-weight: 900;
+}
+
+.menu-pane,
+.page-pane,
+.board-area {
+    -fx-min-width: 460;
+    -fx-max-width: 920;
+    -fx-padding: 24;
+    -fx-background-radius: 22;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.34), 24, 0.2, 0, 8);
+}
+
+.menu-action {
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.menu-pane .menu-action {
+    -fx-min-width: 220;
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-min-width: 130;
+}
+
+.settings-row {
+    -fx-max-width: 820;
+}
+
+.text-field {
+    -fx-font-size: 13px;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.theme-combo-row {
+    -fx-alignment: center-left;
+}
+
+.theme-combo-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.theme-combo-swatch {
+    -fx-min-width: 12;
+    -fx-pref-width: 12;
+    -fx-max-width: 12;
+    -fx-min-height: 12;
+    -fx-pref-height: 12;
+    -fx-max-height: 12;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+.info-message {
+    -fx-font-size: 13px;
+}
+
+.game-root {
+    -fx-background-color: transparent;
+}
+
+.game-top-bar {
+    -fx-alignment: center-left;
+    -fx-padding: 6 8 6 8;
+}
+
+.board-container {
+    -fx-alignment: center;
+    -fx-min-height: 420;
+}
+
+.board-host {
+    -fx-padding: 6;
+    -fx-background-radius: 16;
+}
+
+.board-frame {
+    -fx-padding: 0;
+}
+
+.board-legend-row,
+.board-legend-col {
+    -fx-alignment: center;
+}
+
+.board-legend-row {
+    -fx-spacing: 0;
+    -fx-padding: 2 0 2 0;
+}
+
+.board-legend-col {
+    -fx-spacing: 0;
+    -fx-padding: 0 0 0 0;
+}
+
+.board-legend {
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-opacity: 0.92;
+}
+
+.board-grid {
+    -fx-hgap: 0;
+    -fx-vgap: 0;
+    -fx-border-width: 2;
+}
+
+.square-cell {
+    -fx-font-size: 44px;
+    -fx-font-weight: 800;
+    -fx-font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Arial Unicode MS";
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.square-light {
+    -fx-background-color: linear-gradient(to bottom, #d0bb9f, #c2ac90);
+}
+
+.square-dark {
+    -fx-background-color: linear-gradient(to bottom, #6e5943, #5f4d3a);
+}
+
+.selected-square {
+    -fx-border-color: #d6af45;
+    -fx-border-width: 3;
+}
+
+.target-square {
+    -fx-border-color: #5cbf85;
+    -fx-border-width: 3;
+}
+
+.moving-piece {
+    -fx-font-size: 44px;
+    -fx-font-weight: 800;
+    -fx-font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Arial Unicode MS";
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.52), 8, 0.35, 0, 2);
+}
+
+.square-cell.piece-style-classic,
+.moving-piece.piece-style-classic {
+    -fx-font-size: 45px;
+}
+
+.square-cell.piece-style-minimal,
+.moving-piece.piece-style-minimal {
+    -fx-font-size: 42px;
+    -fx-font-weight: 800;
+}
+
+.square-cell.piece-style-tournament,
+.moving-piece.piece-style-tournament {
+    -fx-font-size: 47px;
+    -fx-font-weight: 900;
+}
+
+.app-root .board-host .square-cell.piece-white {
+    -fx-text-fill: linear-gradient(to bottom, #f6ecd9 0%, #e8d9bf 58%, #d7c2a1 100%);
+    -fx-effect: null;
+}
+
+.app-root .board-host .moving-piece.piece-white {
+    -fx-text-fill: linear-gradient(to bottom, #f6ecd9 0%, #e8d9bf 58%, #d7c2a1 100%);
+    -fx-effect: dropshadow(gaussian, rgba(16, 12, 8, 0.5), 5, 0.28, 0, 1);
+}
+
+.app-root .board-host .square-cell.piece-white .text,
+.app-root .board-host .moving-piece.piece-white .text {
+    -fx-fill: linear-gradient(to bottom, #f7eedd 0%, #eadcbf 56%, #d8c19f 100%);
+    -fx-stroke: rgba(50, 36, 23, 0.85);
+    -fx-stroke-width: 1.15;
+    -fx-stroke-type: outside;
+}
+
+.app-root .board-host .square-cell.piece-black {
+    -fx-text-fill: linear-gradient(to bottom, #3f3d3a 0%, #252321 62%, #141312 100%);
+    -fx-effect: null;
+}
+
+.app-root .board-host .moving-piece.piece-black {
+    -fx-text-fill: linear-gradient(to bottom, #3f3d3a 0%, #252321 62%, #141312 100%);
+    -fx-effect: dropshadow(gaussian, rgba(255, 241, 210, 0.14), 3, 0.2, 0, 0);
+}
+
+.app-root .board-host .square-cell.piece-black .text,
+.app-root .board-host .moving-piece.piece-black .text {
+    -fx-fill: linear-gradient(to bottom, #46433f 0%, #2a2724 62%, #171615 100%);
+    -fx-stroke: rgba(239, 220, 186, 0.38);
+    -fx-stroke-width: 0.7;
+    -fx-stroke-type: outside;
+}
+
+.side-panel {
+    -fx-spacing: 10;
+    -fx-border-width: 0 0 0 1;
+    -fx-background-radius: 14;
+    -fx-min-width: 270;
+}
+
+.panel-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.timer-line {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.captured-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.captured-line {
+    -fx-font-size: 20px;
+    -fx-line-spacing: 2;
+    -fx-font-weight: 700;
+}
+
+.captured-rail {
+    -fx-min-width: 68;
+    -fx-pref-width: 74;
+    -fx-max-width: 82;
+    -fx-padding: 6 4 6 4;
+}
+
+.captured-line-vertical {
+    -fx-font-size: 19px;
+    -fx-line-spacing: 1;
+    -fx-font-weight: 700;
+    -fx-wrap-text: true;
+    -fx-pref-width: 70;
+}
+
+.toast {
+    -fx-padding: 9 14 9 14;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #f8f3ea;
+}
+
+.toast-info {
+    -fx-background-color: rgba(89, 115, 148, 0.92);
+}
+
+.toast-success {
+    -fx-background-color: rgba(78, 136, 99, 0.94);
+}
+
+.toast-error {
+    -fx-background-color: rgba(164, 82, 72, 0.94);
+}
+
+.confirm-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.48);
+}
+
+.confirm-card {
+    -fx-max-width: 320;
+    -fx-min-width: 260;
+    -fx-max-height: -Infinity;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 8;
+}
+
+.confirm-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+}

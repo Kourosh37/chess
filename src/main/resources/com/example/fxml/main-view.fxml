@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootStack" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.controller.MainController" styleClass="app-root"
+           focusTraversable="true" onKeyPressed="#onRootKeyPressed">
+
+    <VBox fx:id="mainMenuPane" alignment="CENTER" spacing="18.0" styleClass="menu-pane">
+        <StackPane.margin>
+            <Insets top="42.0" right="24.0" bottom="42.0" left="24.0"/>
+        </StackPane.margin>
+        <children>
+            <Label text="Chess Studio" styleClass="title-main"/>
+            <Label text="Professional Chess Platform" styleClass="subtitle-main"/>
+            <Button text="Start New Game" onAction="#onStartNewGame" styleClass="menu-action"/>
+            <Button text="Load Game" onAction="#onOpenLoadGame" styleClass="menu-action"/>
+            <Button text="Settings" onAction="#onOpenSettings" styleClass="menu-action"/>
+            <Button text="Exit" onAction="#onExitApp" styleClass="menu-action"/>
+        </children>
+        <padding>
+            <Insets top="40.0" right="40.0" bottom="40.0" left="40.0"/>
+        </padding>
+    </VBox>
+
+    <VBox fx:id="settingsPane" alignment="CENTER" spacing="14.0" styleClass="page-pane" visible="false" managed="false">
+        <StackPane.margin>
+            <Insets top="24.0" right="20.0" bottom="24.0" left="20.0"/>
+        </StackPane.margin>
+        <children>
+            <Label text="Settings" styleClass="page-title"/>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Game Mode" styleClass="field-label"/>
+                    <ComboBox fx:id="settingsGameModeCombo" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Difficulty" styleClass="field-label"/>
+                    <ComboBox fx:id="settingsDifficultyCombo" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Turn Timer" styleClass="field-label"/>
+                    <ComboBox fx:id="settingsTimeControlCombo" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Palette" styleClass="field-label"/>
+                    <ComboBox fx:id="settingsThemeCombo" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Piece Style" styleClass="field-label"/>
+                    <ComboBox fx:id="settingsPieceStyleCombo" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Touch-Move Rule" styleClass="field-label"/>
+                    <CheckBox fx:id="settingsTouchMoveToggle" text="Enabled"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Save Folder" styleClass="field-label"/>
+                    <TextField fx:id="settingsSaveDirectoryField" prefWidth="380.0" promptText="C:\Users\YourName\.chess-studio\saves"/>
+                    <Button text="Browse..." onAction="#onSettingsBrowseSaveDirectory" styleClass="menu-action"/>
+                    <Button text="Use Default" onAction="#onSettingsUseDefaultSaveDirectory" styleClass="menu-action"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Sound" styleClass="field-label"/>
+                    <CheckBox fx:id="settingsSoundToggle" text="Enabled"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="SFX Volume" styleClass="field-label"/>
+                    <Slider fx:id="settingsSfxSlider" min="0.0" max="1.0" value="0.8" blockIncrement="0.05" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
+                <children>
+                    <Label text="Menu Music Volume" styleClass="field-label"/>
+                    <Slider fx:id="settingsMenuMusicSlider" min="0.0" max="1.0" value="0.55" blockIncrement="0.05" prefWidth="220.0"/>
+                </children>
+            </HBox>
+
+            <Label fx:id="settingsInfoLabel" text="Change and save your preferences." styleClass="info-message"/>
+
+            <HBox spacing="12.0" alignment="CENTER">
+                <children>
+                    <Button text="Back to Defaults" onAction="#onSettingsResetDefaults" styleClass="menu-action"/>
+                    <Button text="Save &amp; Back" onAction="#onSettingsSaveAndBack" styleClass="menu-action"/>
+                    <Button text="Back" onAction="#onSettingsBack" styleClass="menu-action"/>
+                </children>
+            </HBox>
+        </children>
+        <padding>
+            <Insets top="26.0" right="34.0" bottom="26.0" left="34.0"/>
+        </padding>
+    </VBox>
+
+    <VBox fx:id="loadPane" alignment="CENTER" spacing="14.0" styleClass="page-pane" visible="false" managed="false">
+        <StackPane.margin>
+            <Insets top="24.0" right="20.0" bottom="24.0" left="20.0"/>
+        </StackPane.margin>
+        <children>
+            <Label text="Load Game" styleClass="page-title"/>
+            <ListView fx:id="loadGamesListView" prefWidth="720.0" prefHeight="430.0" VBox.vgrow="ALWAYS"/>
+            <Label fx:id="loadStatusLabel" text="" styleClass="info-message"/>
+            <HBox spacing="12.0" alignment="CENTER">
+                <children>
+                    <Button text="Refresh" onAction="#onLoadRefresh" styleClass="menu-action"/>
+                    <Button text="Load Selected" onAction="#onLoadSelectedGame" styleClass="menu-action"/>
+                    <Button text="Delete Selected" onAction="#onDeleteSelectedSave" styleClass="menu-action"/>
+                    <Button text="Back" onAction="#onLoadBack" styleClass="menu-action"/>
+                </children>
+            </HBox>
+        </children>
+        <padding>
+            <Insets top="26.0" right="34.0" bottom="26.0" left="34.0"/>
+        </padding>
+    </VBox>
+
+    <BorderPane fx:id="gamePane" styleClass="game-root" visible="false" managed="false">
+        <top>
+            <HBox spacing="10.0" styleClass="game-top-bar">
+                <children>
+                    <Button text="Back" onAction="#onGameBackToMenu" styleClass="menu-action"/>
+                    <Button text="Pause / Resume" onAction="#onGamePauseResume" styleClass="menu-action"/>
+                </children>
+                <padding>
+                    <Insets top="10.0" right="14.0" bottom="10.0" left="14.0"/>
+                </padding>
+            </HBox>
+        </top>
+
+        <center>
+            <HBox spacing="8.0" alignment="CENTER" styleClass="board-area">
+                <children>
+                    <VBox spacing="6.0" alignment="TOP_CENTER" styleClass="captured-rail">
+                        <children>
+                            <Label text="By Black" styleClass="captured-title"/>
+                            <Label fx:id="capturedByBlackLabel" text="-" wrapText="true" styleClass="captured-line-vertical"/>
+                        </children>
+                    </VBox>
+                    <StackPane fx:id="boardContainer" styleClass="board-container">
+                        <HBox.hgrow>ALWAYS</HBox.hgrow>
+                        <padding>
+                            <Insets top="8.0" right="8.0" bottom="8.0" left="8.0"/>
+                        </padding>
+                    </StackPane>
+                    <VBox spacing="6.0" alignment="TOP_CENTER" styleClass="captured-rail">
+                        <children>
+                            <Label text="By White" styleClass="captured-title"/>
+                            <Label fx:id="capturedByWhiteLabel" text="-" wrapText="true" styleClass="captured-line-vertical"/>
+                        </children>
+                    </VBox>
+                </children>
+                <padding>
+                    <Insets top="14.0" right="8.0" bottom="14.0" left="8.0"/>
+                </padding>
+            </HBox>
+        </center>
+
+        <right>
+            <VBox spacing="10.0" styleClass="side-panel" prefWidth="320.0" minWidth="270.0">
+                <children>
+                    <Label text="Game Info" styleClass="panel-title"/>
+                    <Label fx:id="turnLabel" text="Turn:"/>
+                    <Label fx:id="gameStatusLabel" text="Status:" wrapText="true"/>
+                    <Label fx:id="whiteTimerLabel" text="White: --:--" styleClass="timer-line"/>
+                    <Label fx:id="blackTimerLabel" text="Black: --:--" styleClass="timer-line"/>
+                    <Label fx:id="messageLabel" text="Ready" wrapText="true" styleClass="info-message"/>
+                    <Label text="Moves" styleClass="panel-title"/>
+                    <ListView fx:id="movesListView" VBox.vgrow="ALWAYS"/>
+                </children>
+                <padding>
+                    <Insets top="18.0" right="18.0" bottom="18.0" left="18.0"/>
+                </padding>
+            </VBox>
+        </right>
+    </BorderPane>
+
+    <VBox fx:id="toastContainer" alignment="TOP_RIGHT" spacing="8.0" mouseTransparent="true" StackPane.alignment="TOP_RIGHT">
+        <padding>
+            <Insets top="18.0" right="18.0" bottom="18.0" left="18.0"/>
+        </padding>
+    </VBox>
+
+    <StackPane fx:id="confirmOverlay" visible="false" managed="false" styleClass="confirm-overlay">
+        <VBox spacing="8.0" alignment="CENTER" styleClass="confirm-card" maxHeight="-Infinity" maxWidth="-Infinity">
+            <children>
+                <Label fx:id="confirmTitleLabel" text="Confirm" styleClass="confirm-title"/>
+                <Label fx:id="confirmMessageLabel" text="Are you sure?" wrapText="true" styleClass="info-message"/>
+                <HBox spacing="12.0" alignment="CENTER">
+                    <children>
+                        <Button fx:id="confirmYesButton" text="Yes" onAction="#onConfirmYes" styleClass="menu-action"/>
+                        <Button fx:id="confirmNoButton" text="No" onAction="#onConfirmNo" styleClass="menu-action"/>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets top="12.0" right="14.0" bottom="12.0" left="14.0"/>
+            </padding>
+        </VBox>
+    </StackPane>
+
+</StackPane>
