@@ -29,6 +29,7 @@ import javafx.animation.TranslateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -1314,8 +1315,12 @@ public class MainController {
 
                 Label label = new Label(theme.toString());
                 label.getStyleClass().add("theme-combo-title");
+                label.setAlignment(Pos.CENTER_LEFT);
+                label.setMaxHeight(Double.MAX_VALUE);
 
                 HBox swatches = new HBox(4);
+                swatches.getStyleClass().add("theme-combo-swatches");
+                swatches.setAlignment(Pos.CENTER_LEFT);
                 for (String color : theme.previewColors()) {
                     Region swatch = new Region();
                     swatch.getStyleClass().add("theme-combo-swatch");
@@ -1325,6 +1330,8 @@ public class MainController {
 
                 HBox row = new HBox(8, swatches, label);
                 row.getStyleClass().add("theme-combo-row");
+                row.setAlignment(Pos.CENTER_LEFT);
+                setAlignment(Pos.CENTER_LEFT);
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setGraphic(row);
             }
