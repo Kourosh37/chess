@@ -89,6 +89,38 @@
     -fx-border-radius: 10;
 }
 
+.combo-box-base {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.combo-box > .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0 10 0 10;
+}
+
+.combo-box > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-background-radius: 0 10 10 0;
+    -fx-border-radius: 0 10 10 0;
+    -fx-padding: 0 12 0 10;
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.combo-box-popup > .list-view .list-cell {
+    -fx-background-insets: 0;
+}
+
 .text-field {
     -fx-font-size: 13px;
     -fx-padding: 8 10 8 10;
