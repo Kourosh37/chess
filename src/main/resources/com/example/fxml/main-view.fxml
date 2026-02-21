@@ -121,6 +121,7 @@
             <HBox spacing="12.0" alignment="CENTER">
                 <children>
                     <Button text="Back to Defaults" onAction="#onSettingsResetDefaults" styleClass="menu-action"/>
+                    <Button text="Apply" onAction="#onSettingsApply" styleClass="menu-action"/>
                     <Button text="Save &amp; Back" onAction="#onSettingsSaveAndBack" styleClass="menu-action"/>
                     <Button text="Back" onAction="#onSettingsBack" styleClass="menu-action"/>
                 </children>
