@@ -2,18 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="rootStack" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<StackPane fx:id="rootStack" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.example.controller.MainController" styleClass="app-root"
            focusTraversable="true" onKeyPressed="#onRootKeyPressed">
 
@@ -22,12 +22,15 @@
             <Insets top="42.0" right="24.0" bottom="42.0" left="24.0"/>
         </StackPane.margin>
         <children>
-            <Label text="Chess Studio" styleClass="title-main"/>
-            <Label text="Professional Chess Platform" styleClass="subtitle-main"/>
-            <Button text="Start New Game" onAction="#onStartNewGame" styleClass="menu-action"/>
-            <Button text="Load Game" onAction="#onOpenLoadGame" styleClass="menu-action"/>
-            <Button text="Settings" onAction="#onOpenSettings" styleClass="menu-action"/>
-            <Button text="Exit" onAction="#onExitApp" styleClass="menu-action"/>
+            <Label text="chess" styleClass="title-main"/>
+            <VBox alignment="CENTER" spacing="10.0" styleClass="menu-actions-wrap">
+                <children>
+                    <Button text="Start New Game" onAction="#onStartNewGame" styleClass="menu-action"/>
+                    <Button text="Load Game" onAction="#onOpenLoadGame" styleClass="menu-action"/>
+                    <Button text="Settings" onAction="#onOpenSettings" styleClass="menu-action"/>
+                    <Button text="Exit" onAction="#onExitApp" styleClass="menu-action"/>
+                </children>
+            </VBox>
         </children>
         <padding>
             <Insets top="40.0" right="40.0" bottom="40.0" left="40.0"/>
@@ -79,7 +82,7 @@
             <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
                 <children>
                     <Label text="Touch-Move Rule" styleClass="field-label"/>
-                    <CheckBox fx:id="settingsTouchMoveToggle" text="Enabled"/>
+                    <ToggleButton fx:id="settingsTouchMoveToggle" text="OFF" styleClass="settings-toggle" minWidth="92.0"/>
                 </children>
             </HBox>
 
@@ -95,7 +98,7 @@
             <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="settings-row">
                 <children>
                     <Label text="Sound" styleClass="field-label"/>
-                    <CheckBox fx:id="settingsSoundToggle" text="Enabled"/>
+                    <ToggleButton fx:id="settingsSoundToggle" text="OFF" styleClass="settings-toggle" minWidth="92.0"/>
                 </children>
             </HBox>
 
@@ -195,13 +198,22 @@
             <VBox spacing="10.0" styleClass="side-panel" prefWidth="320.0" minWidth="270.0">
                 <children>
                     <Label text="Game Info" styleClass="panel-title"/>
-                    <Label fx:id="turnLabel" text="Turn:"/>
-                    <Label fx:id="gameStatusLabel" text="Status:" wrapText="true"/>
-                    <Label fx:id="whiteTimerLabel" text="White: --:--" styleClass="timer-line"/>
-                    <Label fx:id="blackTimerLabel" text="Black: --:--" styleClass="timer-line"/>
-                    <Label fx:id="messageLabel" text="Ready" wrapText="true" styleClass="info-message"/>
+                    <HBox spacing="8.0" alignment="CENTER_LEFT" styleClass="status-strip">
+                        <children>
+                            <Label fx:id="turnLabel" text="Turn:" styleClass="status-pill"/>
+                            <Label fx:id="aiStateLabel" text="AI: Ready" styleClass="status-pill"/>
+                        </children>
+                    </HBox>
+                    <Label fx:id="gameStatusLabel" text="Status:" wrapText="true" styleClass="status-line"/>
+                    <HBox spacing="8.0" alignment="CENTER_LEFT" styleClass="timer-strip">
+                        <children>
+                            <Label fx:id="whiteTimerLabel" text="White: --:--" styleClass="timer-chip"/>
+                            <Label fx:id="blackTimerLabel" text="Black: --:--" styleClass="timer-chip"/>
+                        </children>
+                    </HBox>
+                    <Label fx:id="messageLabel" text="Ready" wrapText="true" styleClass="info-message message-card"/>
                     <Label text="Moves" styleClass="panel-title"/>
-                    <ListView fx:id="movesListView" VBox.vgrow="ALWAYS"/>
+                    <ListView fx:id="movesListView" styleClass="moves-list" VBox.vgrow="ALWAYS"/>
                 </children>
                 <padding>
                     <Insets top="18.0" right="18.0" bottom="18.0" left="18.0"/>

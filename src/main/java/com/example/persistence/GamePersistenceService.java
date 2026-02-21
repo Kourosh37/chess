@@ -64,7 +64,7 @@ public class GamePersistenceService {
         }
 
         try (OutputStream out = Files.newOutputStream(target)) {
-            properties.store(out, "Chess Studio Save");
+            properties.store(out, "chess Save");
         } catch (IOException e) {
             throw new IllegalStateException("Unable to save game", e);
         }

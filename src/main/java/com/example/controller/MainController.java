@@ -15,22 +15,22 @@ import com.example.persistence.GamePersistenceService;
 import com.example.persistence.GameSaveRecord;
 import com.example.ui.ChessBoardView;
 import com.example.ui.ThemeService;
+import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Piece;
 import com.github.bhlangonijr.chesslib.Side;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.Timeline;
-import javafx.animation.KeyFrame;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -39,6 +39,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -63,6 +64,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -78,6 +80,7 @@ public class MainController {
 
     private static final DateTimeFormatter SAVE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         .withZone(ZoneId.systemDefault());
+    private static final long MIN_AI_MOVE_DELAY_MILLIS = 2_000L;
 
     private final AppSettings settings;
     private final ChessGameService gameService;
@@ -114,11 +117,11 @@ public class MainController {
     @FXML
     private ComboBox<PieceStyle> settingsPieceStyleCombo;
     @FXML
-    private CheckBox settingsTouchMoveToggle;
+    private ToggleButton settingsTouchMoveToggle;
     @FXML
     private TextField settingsSaveDirectoryField;
     @FXML
-    private CheckBox settingsSoundToggle;
+    private ToggleButton settingsSoundToggle;
     @FXML
     private Slider settingsSfxSlider;
     @FXML
@@ -137,6 +140,8 @@ public class MainController {
     private Label gameStatusLabel;
     @FXML
     private Label turnLabel;
+    @FXML
+    private Label aiStateLabel;
     @FXML
     private Label whiteTimerLabel;
     @FXML
@@ -178,6 +183,8 @@ public class MainController {
     private final AtomicReference<GameSaveRecord> pendingSaveSnapshot = new AtomicReference<>();
     private boolean savesDirty = true;
     private Map<String, Piece> boardSnapshot = Collections.emptyMap();
+    private final AtomicLong aiRequestToken = new AtomicLong();
+    private PauseTransition aiMoveDelayTransition;
 
     private Page currentPage = Page.MAIN_MENU;
 
@@ -220,6 +227,7 @@ public class MainController {
         currentGameSave = null;
         currentGameName = null;
         currentGameSaveId = null;
+        setAiThinkingState(false);
         reloadBoardSnapshot();
         resetTimersForNewGame();
         refreshBoard();
@@ -283,6 +291,7 @@ public class MainController {
 
     @FXML
     private void onStartNewGame() {
+        cancelPendingAiMove();
         autoSaveCurrentGame();
         currentGameSave = null;
         currentGameName = null;
@@ -317,6 +326,7 @@ public class MainController {
     @FXML
     private void onExitApp() {
         showConfirm("Exit", "Are you sure you want to exit?", () -> {
+            cancelPendingAiMove();
             autoSaveCurrentGame();
             showToast("Session saved", "toast-success");
             PauseTransition pause = new PauseTransition(Duration.millis(220));
@@ -339,6 +349,18 @@ public class MainController {
     }
 
     @FXML
+    private void onSettingsApply() {
+        if (!applyControlsToSettings()) {
+            return;
+        }
+        settingsInfoLabel.setText("Settings applied.");
+        showToast("Settings applied", "toast-success");
+        if (currentPage == Page.GAME) {
+            resetTimersForCurrentTurn();
+        }
+    }
+
+    @FXML
     private void onSettingsBack() {
         loadSettingsIntoControls();
         showPage(Page.MAIN_MENU, true);
@@ -356,14 +378,14 @@ public class MainController {
         settingsSoundToggle.setSelected(defaults.soundEnabledProperty().get());
         settingsSfxSlider.setValue(defaults.sfxVolumeProperty().get());
         settingsMenuMusicSlider.setValue(defaults.menuMusicVolumeProperty().get());
-        settingsInfoLabel.setText("Defaults loaded. Save to apply.");
+        settingsInfoLabel.setText("Defaults loaded. Click Apply or Save & Back.");
         showToast("Default settings loaded", "toast-info");
     }
 
     @FXML
     private void onSettingsUseDefaultSaveDirectory() {
         settingsSaveDirectoryField.setText(AppSettings.defaultSaveDirectoryPath().toString());
-        settingsInfoLabel.setText("Default save folder selected. Save to apply.");
+        settingsInfoLabel.setText("Default save folder selected. Click Apply or Save & Back.");
     }
 
     @FXML
@@ -384,7 +406,7 @@ public class MainController {
 
         String resolved = selected.toPath().toAbsolutePath().normalize().toString();
         settingsSaveDirectoryField.setText(resolved);
-        settingsInfoLabel.setText("Save folder selected. Save to apply.");
+        settingsInfoLabel.setText("Save folder selected. Click Apply or Save & Back.");
     }
 
     @FXML
@@ -405,6 +427,7 @@ public class MainController {
             return;
         }
 
+        cancelPendingAiMove();
         gameService.restore(selected.fen(), selected.moveHistory());
         reloadBoardSnapshot();
         currentGameSave = selected;
@@ -473,6 +496,7 @@ public class MainController {
     @FXML
     private void onGameBackToMenu() {
         showConfirm("Leave Game", "Return to main menu? The game will be auto-saved.", () -> {
+            cancelPendingAiMove();
             autoSaveCurrentGame();
             showToast("Game auto-saved", "toast-success");
             showPage(Page.MAIN_MENU, true);
@@ -514,7 +538,10 @@ public class MainController {
         settingsThemeCombo.setCellFactory(list -> createThemeCell());
         settingsThemeCombo.setButtonCell(createThemeCell());
         settingsPieceStyleCombo.getItems().setAll(PieceStyle.values());
+        settingsTouchMoveToggle.selectedProperty().addListener((obs, oldValue, newValue) -> updateToggleText(settingsTouchMoveToggle));
+        settingsSoundToggle.selectedProperty().addListener((obs, oldValue, newValue) -> updateToggleText(settingsSoundToggle));
         settings.pieceStyleProperty().addListener((obs, oldStyle, newStyle) -> refreshBoard());
+        settings.gameModeProperty().addListener((obs, oldValue, newValue) -> refreshAiStateLabel());
         settings.timeControlProperty().addListener((obs, oldValue, newValue) -> {
             if (currentPage == Page.GAME) {
                 resetTimersForCurrentTurn();
@@ -692,33 +719,102 @@ public class MainController {
     }
 
     private void requestAiIfNeeded() {
-        if (!gameService.isAiTurn() || gameService.isGameOver() || timeOutEnded || currentPage != Page.GAME) {
+        if (aiThinking || !gameService.isAiTurn() || gameService.isGameOver() || timeOutEnded || currentPage != Page.GAME) {
             return;
         }
 
-        aiThinking = true;
+        long requestToken = aiRequestToken.incrementAndGet();
+        Board boardSnapshot = gameService.copyBoard();
+        int searchDepth = settings.difficultyProperty().get().searchDepth();
+        setAiThinkingState(true);
         showToast("AI is thinking...", "toast-info");
 
         aiExecutor.execute(() -> {
-            String uciMove = aiService.chooseMove(gameService.copyBoard(), settings.difficultyProperty().get().searchDepth());
-            Platform.runLater(() -> {
-                MoveOutcome outcome = gameService.playAiMove(uciMove);
-                aiThinking = false;
-
-                if (!outcome.valid()) {
-                    showToast(outcome.message(), "toast-error");
-                    return;
-                }
-
-                playMoveAnimation(outcome, () -> {
-                    reloadBoardSnapshot();
-                    resetTimersForCurrentTurn();
-                    refreshBoard();
-                    refreshMeta();
-                    autoSaveCurrentGame();
+            long startedAt = System.nanoTime();
+            try {
+                String uciMove = aiService.chooseMove(boardSnapshot, searchDepth);
+                long elapsedMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedAt);
+                long remainingDelayMillis = Math.max(0L, MIN_AI_MOVE_DELAY_MILLIS - elapsedMillis);
+                Platform.runLater(() -> scheduleAiMoveApplication(requestToken, uciMove, remainingDelayMillis));
+            } catch (RuntimeException e) {
+                Platform.runLater(() -> {
+                    if (requestToken != aiRequestToken.get()) {
+                        return;
+                    }
+                    setAiThinkingState(false);
+                    showToast("AI failed to generate move.", "toast-error");
                 });
-            });
+            }
         });
+    }
+
+    private void scheduleAiMoveApplication(long requestToken, String uciMove, long remainingDelayMillis) {
+        if (requestToken != aiRequestToken.get()) {
+            return;
+        }
+
+        clearAiDelayTransition();
+        aiMoveDelayTransition = new PauseTransition(Duration.millis(remainingDelayMillis));
+        aiMoveDelayTransition.setOnFinished(event -> {
+            aiMoveDelayTransition = null;
+            applyAiMoveIfCurrent(requestToken, uciMove);
+        });
+        aiMoveDelayTransition.play();
+    }
+
+    private void applyAiMoveIfCurrent(long requestToken, String uciMove) {
+        if (requestToken != aiRequestToken.get()) {
+            return;
+        }
+        if (currentPage != Page.GAME || paused || timeOutEnded || gameService.isGameOver() || !gameService.isAiTurn()) {
+            setAiThinkingState(false);
+            return;
+        }
+
+        MoveOutcome outcome = gameService.playAiMove(uciMove);
+        setAiThinkingState(false);
+
+        if (!outcome.valid()) {
+            showToast(outcome.message(), "toast-error");
+            return;
+        }
+
+        playMoveAnimation(outcome, () -> {
+            reloadBoardSnapshot();
+            resetTimersForCurrentTurn();
+            refreshBoard();
+            refreshMeta();
+            autoSaveCurrentGame();
+        });
+    }
+
+    private void cancelPendingAiMove() {
+        aiRequestToken.incrementAndGet();
+        clearAiDelayTransition();
+        setAiThinkingState(false);
+    }
+
+    private void clearAiDelayTransition() {
+        if (aiMoveDelayTransition != null) {
+            aiMoveDelayTransition.stop();
+            aiMoveDelayTransition = null;
+        }
+    }
+
+    private void setAiThinkingState(boolean thinking) {
+        aiThinking = thinking;
+        refreshAiStateLabel();
+    }
+
+    private void refreshAiStateLabel() {
+        if (aiStateLabel == null) {
+            return;
+        }
+        if (settings.gameModeProperty().get() == GameMode.TWO_PLAYER) {
+            aiStateLabel.setText("AI: Off");
+        } else {
+            aiStateLabel.setText(aiThinking ? "AI: Thinking..." : "AI: Ready");
+        }
     }
 
     private void playMoveAnimation(MoveOutcome outcome, Runnable after) {
@@ -813,6 +909,7 @@ public class MainController {
     }
 
     public void autoSaveBeforeExit() {
+        cancelPendingAiMove();
         autoSaveCurrentGame(true);
     }
 
@@ -823,6 +920,7 @@ public class MainController {
 
     private void refreshMeta() {
         turnLabel.setText("Turn: " + gameService.getTurn().name());
+        refreshAiStateLabel();
         gameStatusLabel.setText(timeOutEnded ? "Time out" : "Status: " + gameService.gameStatusText());
         messageLabel.setText(timeOutEnded ? "Turn time expired." : gameService.gameStatusText());
         List<String> history = gameService.moveHistory();
@@ -850,6 +948,9 @@ public class MainController {
     private void showPage(Page page, boolean animated) {
         if (currentPage == page) {
             return;
+        }
+        if (page != Page.GAME) {
+            cancelPendingAiMove();
         }
 
         Node incoming = nodeFor(page);
@@ -1106,6 +1207,7 @@ public class MainController {
     private void onTimeOut(Side winner) {
         timeOutEnded = true;
         paused = true;
+        cancelPendingAiMove();
         stopTurnClock();
         gameStatusLabel.setText("Status: Time out. Winner: " + winner.name());
         messageLabel.setText("Time out. Winner: " + winner.name());
@@ -1227,6 +1329,13 @@ public class MainController {
                 setGraphic(row);
             }
         };
+    }
+
+    private void updateToggleText(ToggleButton toggleButton) {
+        if (toggleButton == null) {
+            return;
+        }
+        toggleButton.setText(toggleButton.isSelected() ? "ON" : "OFF");
     }
 
     private void reloadBoardSnapshot() {

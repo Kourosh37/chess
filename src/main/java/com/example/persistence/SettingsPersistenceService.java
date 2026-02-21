@@ -73,7 +73,7 @@ public class SettingsPersistenceService {
         props.setProperty("musicVolume", String.valueOf(settings.menuMusicVolumeProperty().get()));
 
         try (OutputStream out = Files.newOutputStream(settingsFile)) {
-            props.store(out, "Chess Studio Settings");
+            props.store(out, "chess Settings");
         } catch (IOException ignored) {
         }
     }

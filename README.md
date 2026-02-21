@@ -1,6 +1,6 @@
-# Chess Studio
+# chess
 
-A desktop chess application built with Java 21, JavaFX 21, and Maven.
+A desktop chess application built with Java 25, JavaFX 25, and Maven.
 
 The project is organized with a clean MVC-style structure, persistent settings, save/load workflows, configurable UI themes, and a responsive 2D gameplay experience.
 
@@ -8,11 +8,13 @@ The project is organized with a clean MVC-style structure, persistent settings, 
 
 - Human vs AI and Human vs Human modes
 - Three AI difficulties (`EASY`, `MEDIUM`, `HARD`)
+- AI move pacing with a guaranteed minimum 2-second think time
 - Smooth animated piece movement
 - Touch-move rule toggle (optional)
 - Per-turn time control presets
 - Multiple visual themes with palette preview
 - Piece style selection
+- Refined game UI with status chips, timer chips, and updated menu layout
 - Background music + action SFX volume controls
 - Auto-save strategy with one save file per active game
 - Save management (load/delete/multi-select)
@@ -20,8 +22,8 @@ The project is organized with a clean MVC-style structure, persistent settings, 
 
 ## Technology Stack
 
-- Java 21
-- JavaFX 21 (`controls`, `fxml`, `media`)
+- Java 25
+- JavaFX 25 (`controls`, `fxml`, `media`)
 - Maven
 - [`chesslib`](https://github.com/bhlangonijr/chesslib) for chess rules and legal move generation
 
@@ -69,7 +71,7 @@ The save directory is configurable from **Settings** using a native folder picke
 
 Prerequisites:
 
-- JDK 21+
+- JDK 25+
 - Maven 3.9+
 
 Commands:
@@ -91,6 +93,7 @@ mvn clean package
 - Load screen supports multi-select and deletion workflows
 - Confirmation overlay is custom (non-blocking app dialog style)
 - In Touch-move mode, selected pieces must complete a legal move before deselection
+- AI status is visible in-game (`AI: Ready`, `AI: Thinking...`, or `AI: Off` in two-player mode)
 
 ## Project Hygiene
 

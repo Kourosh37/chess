@@ -34,7 +34,7 @@ public class App extends Application {
         Scene scene = new Scene(root, initialWidth, initialHeight);
         context.themeService().applyTheme(scene, context.settings().themeProperty().get());
 
-        stage.setTitle("Chess Studio");
+        stage.setTitle("chess");
         stage.setMinWidth(Math.min(1040, visualBounds.getWidth()));
         stage.setMinHeight(Math.min(700, visualBounds.getHeight()));
         stage.setFullScreenExitHint("");
